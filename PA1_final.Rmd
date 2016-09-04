@@ -13,10 +13,10 @@ library(ggplot2)
 ## Loading and preprocessing the data
 ```{r}
 d0 <- read.csv("activity.csv")
-d0$date <- as.Date(d0$date)
 
 d1 <- na.omit(d0)
 
+d1$date <- as.Date(d1$date)
 
 # total number of steps for a day
 totalSteps <- tapply(d1$steps, d1$date, sum)
@@ -27,6 +27,7 @@ totalSteps <- tapply(d1$steps, d1$date, sum)
 ## What is mean total number of steps taken per day?
 ### Histogram of the total number of steps taken each day
 ```{r}
+
 hist(totalSteps, 
         main = "Distribution of steps per day", 
         xlab="Steps per day", 
@@ -34,6 +35,7 @@ hist(totalSteps,
         col = "red", 
         breaks = 25
     )
+
 ```
 
 
@@ -84,7 +86,7 @@ sum(is.na(d0$steps))
 ```
 
 ### strategy for filling in all of the missing values in the dataset
-We will use the average number of steps for the interval as replacement for missing value
+#### We will use the average number of steps for the interval as replacement for missing value
 
 ```{r}
 ## function to return the replacement for the missing value
@@ -104,95 +106,14 @@ d3$steps <-mapply(find.missing.val, d3$steps,d3$interval)
 
 ```
 
-Number of missing values in the new data set
+#### number of missing values in the new data set
 ```{r}
 sum(is.na(d3$steps))
 ```
 
 
-Histogram of the total number of steps taken each day
-```{r}
-totalSteps_imputed <- tapply(d3$steps, d3$date, sum)
-hist(totalSteps_imputed, 
-        main = "Distribution of steps per day with imputed data", 
-        xlab="Steps per day", 
-        ylab="Frequency", 
-        col = "red", 
-        breaks = 25
-    )
-
-```
-
-
-### Mean and median of the total number of steps taken per day
-```{r}
-# mean of total steps based on imputed data
-mean(totalSteps_imputed)
-```
-
-```{r}
-# median of total steps based on imputed data
-median(totalSteps_imputed)
-```
-
-Do these values differ from the estimates from the first part of the assignment? 
-```{r}
-# difference in mean
-mean_diff <- mean(totalSteps) - mean(totalSteps_imputed)
-print(mean_diff)
-```
-
-```{r}
-# difference in median
-median_diff <- median(totalSteps) - median(totalSteps_imputed)
-print(median_diff)
-```
-
-What is the impact of imputing missing data on the estimates of the total daily number of steps?  
-Change in mean   = `r mean_diff`  
-Change in median =  `r median_diff`  
-
-
 
 ## Are there differences in activity patterns between weekdays and weekends?
-Create a factor variable "day" in data set for weekdays and weekends
-```{r}
-d4 <- d3
-
-d4$day <- factor(ifelse(as.POSIXlt(d4$date)$wday %in% c(0,6), "weekend", "weekday"))
-
-```
-
-calculate the averaged number of steps taken by "weekday"" or "weekend":
 ```{r}
 
-d5 <- aggregate(steps ~ interval + day , data = d4 , mean)
-
-```
-
-Plot the graph
-```{r}
-g2 <- ggplot(d5, aes(interval, steps)) + 
-        geom_line() + 
-        facet_grid(day ~ .) +
-        xlab("5-minute interval") + 
-        ylab("avarage number of steps")
-
-g2
-```
-
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
 ```
